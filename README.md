@@ -1,2 +1,10 @@
-# the_annotated_transformer
-The optimized version of the annotated transformer
+The Annotated Transformer
+---
+
+```mermaid
+mindmap
+  root((Transformer))
+        Encoder
+            
+        Decoder
+```
