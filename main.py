@@ -42,7 +42,7 @@ def make_model(
     multi_head_attention: MultiHeadedAttention = MultiHeadedAttention(h, d_model)
 
     # Position-wise Feedforward模块
-    pff: PositionwiseFeedForward = PositionwiseFeedForward(d_model, d_ff, dropout)
+    position_wise_feed_forward: PositionwiseFeedForward = PositionwiseFeedForward(d_model, d_ff, dropout)
 
     # 位置编码模块
     positional_encoding: PositionalEncoding = PositionalEncoding(d_model, dropout)
@@ -50,7 +50,7 @@ def make_model(
     # 1. 编码器部分
 
     # 1.1 单层编码器
-    encoder_layer: EncoderLayer = EncoderLayer(d_model, deepcopy(multi_head_attention), deepcopy(pff), dropout)
+    encoder_layer: EncoderLayer = EncoderLayer(d_model, deepcopy(multi_head_attention), deepcopy(position_wise_feed_forward), dropout)
 
     # 1.2 多层堆叠编码器
     encoder: Encoder = Encoder(encoder_layer, layer_count)
@@ -62,7 +62,7 @@ def make_model(
         d_model,
         deepcopy(multi_head_attention),
         deepcopy(multi_head_attention),
-        deepcopy(pff),
+        deepcopy(position_wise_feed_forward),
         dropout,
     )
 
