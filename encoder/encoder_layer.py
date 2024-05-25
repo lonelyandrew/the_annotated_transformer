@@ -8,7 +8,7 @@ from utils import clones
 
 
 class EncoderLayer(Module):
-    """单层Encoder结构。"""
+    """单层编码器模块。"""
 
     def __init__(self, size: int, self_attention: Module, feed_forward: Module, dropout_prob: float) -> None:
         """模型初始化。
@@ -20,7 +20,7 @@ class EncoderLayer(Module):
             dropout_prob: Dropout概率。
         """
         super(EncoderLayer, self).__init__()
-        self.self_attn: Module = self_attention
+        self.self_attention: Module = self_attention
         self.feed_forward: Module = feed_forward
         self.sublayer: ModuleList = clones(SublayerConnection(size, dropout_prob), 2)
         self.size: int = size
@@ -37,5 +37,5 @@ class EncoderLayer(Module):
         Returns:
             返回单层Encoder的计算结果。
         """
-        x: Tensor = self.sublayer[0](x, lambda y: self.self_attn(y, y, y, mask))
+        x: Tensor = self.sublayer[0](x, lambda y: self.self_attention(y, y, y, mask))
         return self.sublayer[1](x, self.feed_forward)

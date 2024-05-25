@@ -7,7 +7,7 @@ from decoder import Decoder
 from decoder.decoder_layer import DecoderLayer
 from embedding import Embeddings
 from encoder import Encoder
-from encoder.encoder_decoder import EncoderDecoder
+from encoder_decoder import EncoderDecoder
 from encoder.encoder_layer import EncoderLayer
 from generator import Generator
 from multi_head_attention import MultiHeadedAttention
@@ -16,8 +16,8 @@ from positionwise_feedforward import PositionwiseFeedForward
 
 
 def make_model(
-    src_vocab_size: int,
-    tgt_vocab_size: int,
+    source_vocab_size: int,
+    target_vocab_size: int,
     layer_count: int = 6,
     d_model: int = 512,
     d_ff: int = 2048,
@@ -27,8 +27,8 @@ def make_model(
     """构建Transformer模型。
 
     Args:
-        src_vocab_size: 源数据词汇表的大小。
-        tgt_vocab_size: 目标数据词汇表的大小。
+        source_vocab_size: 源数据词汇表的大小。
+        target_vocab_size: 目标数据词汇表的大小。
         layer_count: 模型层数。
         d_model: 表征向量的维度。
         d_ff: 前馈层的维度。
@@ -75,13 +75,13 @@ def make_model(
     decoder: Decoder = Decoder(decoder_layer, layer_count)
 
     # 3. 输入序列Embedding层
-    source_emb: Sequential = Sequential(Embeddings(d_model, src_vocab_size), deepcopy(positional_encoding))
+    source_emb: Sequential = Sequential(Embeddings(d_model, source_vocab_size), deepcopy(positional_encoding))
 
     # 4. 输出序列Embedding层
-    target_emb: Sequential = Sequential(Embeddings(d_model, tgt_vocab_size), deepcopy(positional_encoding))
+    target_emb: Sequential = Sequential(Embeddings(d_model, target_vocab_size), deepcopy(positional_encoding))
 
     # 5. 生成器
-    generator: Generator = Generator(d_model, tgt_vocab_size)
+    generator: Generator = Generator(d_model, target_vocab_size)
 
     # 6. 模型组装
     model: EncoderDecoder = EncoderDecoder(encoder, decoder, source_emb, target_emb, generator)

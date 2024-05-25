@@ -6,7 +6,7 @@ from utils import clones
 
 
 class Encoder(Module):
-    """Core encoder is a stack of n layers"""
+    """编码器模块。"""
 
     def __init__(self, layer: Module, n: int) -> None:
         """编码器初始化。
@@ -22,7 +22,7 @@ class Encoder(Module):
     def forward(self, x: Tensor, mask: Tensor) -> Tensor:
         """前馈计算。
 
-        将数据依次通过多次计算模块。
+        将数据依次通过多层计算模块，最后再接一个layer normalization模块。
 
         Args:
             x: 输入张量。
