@@ -1,26 +1,37 @@
 from torch import Tensor, LongTensor
 from torch.nn import Module
 
+from decoder import Decoder
+from encoder import Encoder
+from generator import Generator
+
 
 class EncoderDecoder(Module):
     """编码器-解码器架构模型。"""
 
-    def __init__(self, encoder, decoder, src_embed, tgt_embed, generator) -> None:
+    def __init__(
+        self,
+        encoder: Encoder,
+        decoder: Decoder,
+        src_embed: Module,
+        tgt_embed: Module,
+        generator: Generator,
+    ) -> None:
         """模型初始化。
 
         Args:
             encoder: 编码器。
             decoder: 解码器。
-            src_embed: 源数据表征。
-            tgt_embed: 目标数据表征。
+            src_embed: 源数据表征层。
+            tgt_embed: 目标数据表征层。
             generator: 生成器。
         """
         super(EncoderDecoder, self).__init__()
-        self.encoder = encoder
-        self.decoder = decoder
-        self.src_embed = src_embed
-        self.tgt_embed = tgt_embed
-        self.generator = generator
+        self.encoder: Encoder = encoder
+        self.decoder: Decoder = decoder
+        self.src_embed: Module = src_embed
+        self.tgt_embed: Module = tgt_embed
+        self.generator: Generator = generator
 
     def forward(self, src: LongTensor, tgt: LongTensor, src_mask, tgt_mask) -> Tensor:
         """前馈计算。

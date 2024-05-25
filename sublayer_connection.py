@@ -1,5 +1,3 @@
-from typing import Sequence
-
 from torch import Tensor
 from torch.nn import Dropout, Module
 
@@ -12,7 +10,7 @@ class SublayerConnection(Module):
     Note for code simplicity the norm is first as opposed to last.
     """
 
-    def __init__(self, size: Sequence[int], dropout: float) -> None:
+    def __init__(self, size: int, dropout: float) -> None:
         """初始化残差连接层。
 
         Args:

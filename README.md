@@ -5,6 +5,11 @@ The Annotated Transformer
 mindmap
   root((Transformer))
         Encoder
-            
+            EncoderLayer
+                MultiHeadAttention
+                SublayerConnection
+                Position-wiseFeedForward
+                SublayerConnection
         Decoder
+            DecoderLayer
 ```

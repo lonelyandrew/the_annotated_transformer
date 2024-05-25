@@ -1,14 +1,12 @@
-from typing import Sequence
-
 import torch
 from torch import Tensor
-from torch.nn import Parameter, Module
+from torch.nn import Module, Parameter
 
 
 class LayerNorm(Module):
-    """Construct a layer norm module (See citation for details)."""
+    """Layer Normalization模块。"""
 
-    def __init__(self, features: Sequence[int], eps: float = 1e-6) -> None:
+    def __init__(self, features: int, eps: float = 1e-6) -> None:
         super(LayerNorm, self).__init__()
         self.a_2: Parameter = Parameter(torch.ones(features))
         self.b_2: Parameter = Parameter(torch.zeros(features))
