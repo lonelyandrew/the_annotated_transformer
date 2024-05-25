@@ -16,24 +16,24 @@ from positionwise_feedforward import PositionwiseFeedForward
 
 
 def make_model(
-    src_vocab: int,
-    tgt_vocab: int,
+    src_vocab_size: int,
+    tgt_vocab_size: int,
     layer_count: int = 6,
     d_model: int = 512,
     d_ff: int = 2048,
     h: int = 8,
-    dropout: float = 0.1,
+    dropout_prob: float = 0.1,
 ) -> EncoderDecoder:
     """构建Transformer模型。
 
     Args:
-        src_vocab: 源数据词汇表的大小。
-        tgt_vocab: 目标数据词汇表的大小。
+        src_vocab_size: 源数据词汇表的大小。
+        tgt_vocab_size: 目标数据词汇表的大小。
         layer_count: 模型层数。
         d_model: 表征向量的维度。
         d_ff: 前馈层的维度。
         h: 多头注意力的头数。
-        dropout: Dropout概率。
+        dropout_prob: Dropout概率。
 
     Returns:
         返回构建完成的模型。
@@ -42,15 +42,20 @@ def make_model(
     multi_head_attention: MultiHeadedAttention = MultiHeadedAttention(h, d_model)
 
     # Position-wise Feedforward模块
-    position_wise_feed_forward: PositionwiseFeedForward = PositionwiseFeedForward(d_model, d_ff, dropout)
+    position_wise_feed_forward: PositionwiseFeedForward = PositionwiseFeedForward(d_model, d_ff, dropout_prob)
 
     # 位置编码模块
-    positional_encoding: PositionalEncoding = PositionalEncoding(d_model, dropout)
+    positional_encoding: PositionalEncoding = PositionalEncoding(d_model, dropout_prob)
 
     # 1. 编码器部分
 
     # 1.1 单层编码器
-    encoder_layer: EncoderLayer = EncoderLayer(d_model, deepcopy(multi_head_attention), deepcopy(position_wise_feed_forward), dropout)
+    encoder_layer: EncoderLayer = EncoderLayer(
+        d_model,
+        deepcopy(multi_head_attention),
+        deepcopy(position_wise_feed_forward),
+        dropout_prob,
+    )
 
     # 1.2 多层堆叠编码器
     encoder: Encoder = Encoder(encoder_layer, layer_count)
@@ -63,20 +68,20 @@ def make_model(
         deepcopy(multi_head_attention),
         deepcopy(multi_head_attention),
         deepcopy(position_wise_feed_forward),
-        dropout,
+        dropout_prob,
     )
 
     # 2.2 多层堆叠解码器
     decoder: Decoder = Decoder(decoder_layer, layer_count)
 
     # 3. 输入序列Embedding层
-    source_emb: Sequential = Sequential(Embeddings(d_model, src_vocab), deepcopy(positional_encoding))
+    source_emb: Sequential = Sequential(Embeddings(d_model, src_vocab_size), deepcopy(positional_encoding))
 
     # 4. 输出序列Embedding层
-    target_emb: Sequential = Sequential(Embeddings(d_model, tgt_vocab), deepcopy(positional_encoding))
+    target_emb: Sequential = Sequential(Embeddings(d_model, tgt_vocab_size), deepcopy(positional_encoding))
 
     # 5. 生成器
-    generator: Generator = Generator(d_model, tgt_vocab)
+    generator: Generator = Generator(d_model, tgt_vocab_size)
 
     # 6. 模型组装
     model: EncoderDecoder = EncoderDecoder(encoder, decoder, source_emb, target_emb, generator)

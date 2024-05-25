@@ -48,5 +48,5 @@ class PositionalEncoding(Module):
         Returns:
             输出加上位置编码的张量结果。
         """
-        x = x + self.pe[:, : x.size(1)].requires_grad_(False)
+        x += self.pe[:, : x.size(1)].requires_grad_(False)
         return self.dropout(x)
